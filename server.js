@@ -26,21 +26,21 @@ const database = {
   ]
 }
 
-// / --> res = this is working
+//Root
 app.get('/', (req, res) => {
   res.send(database.users);
 });
 
-// /signin --> POST = success/fail
+//Signin
 app.post('/signin', (req, res) => {
   if(req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
     res.json('success');
   } else {
     res.status(400).json('error logging in');
   }
-})
+});
 
-// /register --> POST = user
+//Register
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
   database.users.push({
@@ -51,10 +51,24 @@ app.post('/register', (req, res) => {
       entires: 0,
       joined: new Date()
     })
-    res.json(database.users[database.users.length-1]);
-})
+  res.json(database.users[database.users.length-1]);
+});
 
-// /profile/:userid --> GET = user
+//Get user profile
+app.get('/profile/:id', (req, res) => {
+  const { id } = req.params;
+  let found = false;
+  database.users.forEach(user => {
+    if (user.id === id) {
+      found = true;
+      return res.json(user);
+    }
+  })
+  if (!found) {
+    res.status(404).json('not found');
+  }
+});
+
 // /image --> PUT = user
 
 app.listen(3000);
