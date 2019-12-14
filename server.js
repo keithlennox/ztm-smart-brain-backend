@@ -28,7 +28,7 @@ const database = {
 
 // / --> res = this is working
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+  res.send(database.users);
 });
 
 // /signin --> POST = success/fail
@@ -41,6 +41,19 @@ app.post('/signin', (req, res) => {
 })
 
 // /register --> POST = user
+app.post('/register', (req, res) => {
+  const { email, name, password } = req.body;
+  database.users.push({
+      id: '125',
+      name: name,
+      email: email,
+      password: password,
+      entires: 0,
+      joined: new Date()
+    })
+    res.json(database.users[database.users.length-1]);
+})
+
 // /profile/:userid --> GET = user
 // /image --> PUT = user
 
