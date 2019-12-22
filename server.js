@@ -1,27 +1,38 @@
 const express = require('express');
+const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
+app.use(cors())
+
 const database = {
   users: [
     {
       id: '123',
       name: 'John',
-      email: 'john@gmail.com',
-      password: 'cookies',
-      entires: 0,
+      password: 'b',
+      email: 'a',
+      entries: 'c',
       joined: new Date()
     },
     {
       id: '124',
       name: 'Sally',
-      email: 'sally@gmail.com',
       password: 'bananas',
+      email: 'sally@gmail.com',
       entires: 0,
       joined: new Date()
+    }
+  ],
+  login: [
+    {
+      id: '987',
+      hash: '',
+      email: 'john@gmail.com'
     }
   ]
 }
@@ -34,7 +45,8 @@ app.get('/', (req, res) => {
 //Signin
 app.post('/signin', (req, res) => {
   if(req.body.email === database.users[0].email && req.body.password === database.users[0].password) {
-    res.json('success');
+    res.json(database.users[0]);
+    // res.json('success');
   } else {
     res.status(400).json('error logging in');
   }
@@ -43,6 +55,9 @@ app.post('/signin', (req, res) => {
 //Register
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
+  bcrypt.hash(password, null, null, function(err, hash) {
+    console.log(hash);
+  });
   database.users.push({
       id: '125',
       name: name,
@@ -70,7 +85,7 @@ app.get('/profile/:id', (req, res) => {
 });
 
 //Image
-app.post('/image', (req, res) => {
+app.put('/image', (req, res) => {
   const { id } = req.body;
   let found = false;
   database.users.forEach(user => {
@@ -85,4 +100,14 @@ app.post('/image', (req, res) => {
   }
 });
 
-app.listen(3000);
+
+/* // Load hash from your password DB.
+bcrypt.compare("bacon", hash, function(err, res) {
+  // res == true
+});
+bcrypt.compare("veggies", hash, function(err, res) {
+  // res = false
+}); */
+
+
+app.listen(3001);
