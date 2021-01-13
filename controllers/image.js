@@ -2,7 +2,7 @@ const Clarifai = require('clarifai'); //Include Clarifai npm package
 
  //Start of code snippet#1 from Clarifai
 const app = new Clarifai.App({
-  apiKey: 'xxxxxxxxxxxxxxxxxxx' //You will have to supply your own api key.
+  apiKey: process.env.API_CLARIFAI
 }); //End of code snippet#1 from Clarifai
 
 //Start of code snippet#2 from Clarifai
